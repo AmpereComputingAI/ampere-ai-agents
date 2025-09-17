@@ -1,0 +1,54 @@
+services:
+  ai-agent:
+    image: ampere-ai-agents:0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "ai-agent-local"
+    depends_on:
+      - ollama
+    restart: always
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    environment:
+      - NODE_ENV=development
+      - N8N_BASIC_AUTH_ACTIVE=false # Disables authentication
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_USER_MANAGEMENT_DISABLED=true
+      - N8N_READ_ONLY=true
+      - N8N_INITIAL_SETUP_COMPLETED=true
+      - N8N_LOG_LEVEL=debug
+      - N8N_COMMUNITY_PACKAGES_ENABLED=true
+      - N8N_UNVERIFIED_COMMUNITY_PACKAGES_ENABLED=true
+    networks:
+      - ai-agents-net
+
+  ollama:
+    image: ghcr.io/amperecomputingai/ollama-ampere:1.0.0-ol9
+    container_name: ollama-server
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - n8n_ollama:/root/.ollama
+    environment:
+      - "OLLAMA_HOST=0.0.0.0:11434"
+    tty: true
+    #entrypoint: ["ollama-entrypoint.sh"]
+    #command: ["serve && ollama pull llama3.2:1b"]
+    #entrypoint: ["/bin/bash", "-c", "ollama serve && sleep 5 && ollama pull llama3.2:1b"]
+    entrypoint: "bash -c \"ollama serve & sleep 5 && ollama pull llama3.2:1b && wait\""
+    networks:
+      - ai-agents-net
+
+networks:
+  ai-agents-net:
+    driver: bridge
+
+volumes:
+  n8n_data: {}
+  n8n_ollama: {}
