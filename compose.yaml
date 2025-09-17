@@ -1,6 +1,6 @@
 services:
   ai-agent:
-    image: ampere-ai-agents:0.1
+    image: ghcr.io/amperecomputingai/ampere-ai-agents:0.1
     build:
       context: .
       dockerfile: Dockerfile
