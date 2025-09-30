@@ -1,12 +1,12 @@
 services:
-  ai-agent:
-    image: ghcr.io/amperecomputingai/ampere-ai-agents:0.1
+  agentic_ai_demo_service:
+    image: ghcr.io/amperecomputingai/ampere-ai-agents:0.1.2
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: "ai-agent-local"
+    container_name: agentic_ai_demo_service
     depends_on:
-      - ollama
+      - ollama_for_agent_service
     restart: always
     ports:
       - "5678:5678"
@@ -24,19 +24,20 @@ services:
       - N8N_LOG_LEVEL=debug
       - N8N_COMMUNITY_PACKAGES_ENABLED=true
       - N8N_UNVERIFIED_COMMUNITY_PACKAGES_ENABLED=true
+      - N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=true
     networks:
       - ai-agents-net
 
-  ollama:
+  ollama_for_agent_service:
     image: ghcr.io/amperecomputingai/ollama-ampere:1.0.0-ol9
-    container_name: ollama-server
+    container_name: ollama_for_agent_service
     restart: unless-stopped
     ports:
       - "11434:11434"
     volumes:
       - n8n_ollama:/root/.ollama
     environment:
-      - "OLLAMA_HOST=0.0.0.0:11434"
+      - "OLLAMA_HOST=http://ollama_for_agent_service:11434"
     tty: true
     #entrypoint: ["ollama-entrypoint.sh"]
     #command: ["serve && ollama pull llama3.2:1b"]
@@ -45,6 +46,29 @@ services:
     networks:
       - ai-agents-net
 
+  searxng:
+    container_name: searxng
+    image: docker.io/searxng/searxng:latest
+    restart: unless-stopped
+    networks:
+      - ai-agents-net
+    ports:
+      #- "127.0.0.1:8081:8080"
+      - "8081:8080"
+      #- "0.0.0.1:8080:8080"
+    volumes:
+      - ./searxng:/etc/searxng:rw
+      - n8n_searxng:/var/cache/searxng:rw
+    environment:
+     # - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-localhost}/
+     #- SEARXNG_BASE_URL=http://${SEARXNG_HOSTNAME:-localhost}/
+     - SEARXNG_BASE_URL=http://searxng:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+
 networks:
   ai-agents-net:
     driver: bridge
@@ -52,3 +76,4 @@ networks:
 volumes:
   n8n_data: {}
   n8n_ollama: {}
+  n8n_searxng: {}

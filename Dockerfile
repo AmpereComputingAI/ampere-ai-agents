@@ -9,3 +9,4 @@ COPY --chown=node:node ./credentials ./credentials
 
 RUN n8n import:credentials --input=./credentials/credentials.json
 RUN n8n import:workflow --input=./workflows/financial-news-summary.json
+RUN n8n import:workflow --input=./workflows/news-research-summarization-ollama-searxng.json

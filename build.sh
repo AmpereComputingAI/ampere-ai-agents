@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker compose build ai-agent
+docker compose build agentic_ai_demo_service
