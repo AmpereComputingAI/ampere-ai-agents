@@ -67,7 +67,10 @@ To stop and remove all the containers and associated networks, run the following
 ## Services Overview
 _agentic_ai_demo_service_: The core workflow automation platform powered by n8n.  
 _ollama_for_agent_service_: Provides local LLM inference via the Ollama API.  
-_searxng_: A private, hackable metasearch engine to provide workflows with web search capabilities.  
+_searxng_: A private, hackable metasearch engine to provide workflows with web search capabilities. 
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## References
 - https://n8n.io/
