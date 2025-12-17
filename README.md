@@ -1,4 +1,18 @@
-<h1 align="center">Agentic AI Demo with n8n, Ollama, and SearXNG</h1>
+<div align="center">
+
+  # Ampere AI Agents
+
+  **Build Agentic AI workflows using n8n, Ollama, and SearXNG on Ampere CPU**
+
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![Platform](https://img.shields.io/badge/Platform-Ampere%20Altra%20%2F%20AmpereOne-blue)](https://amperecomputing.com)
+  [![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker)](https://docs.docker.com/get-docker/)
+
+</div>
+
+---
+
+## Overview
 This repository provides a multi-container Docker setup for an Agentic AI demonstration. It integrates the n8n workflow automation tool, a self-hosted Ollama large language model, and the SearXNG private metasearch engine.
 
 ### Download the demo repository
